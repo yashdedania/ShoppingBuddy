@@ -1,0 +1,99 @@
+import {StyleSheet} from 'react-native';
+import color from '../color';
+import font from '../font';
+
+const styles = StyleSheet.create({
+    ItemContainer:{
+        flex:1,
+        justifyContent:'space-between',
+        paddingTop:4,
+        paddingBottom:4,
+        paddingRight:2,
+        paddingLeft:2,
+        marginLeft:2,
+        alignItems:'center',
+    },
+    ItemLeft:{
+        flex:1.2,
+        justifyContent:'center',
+        alignItems:'center',
+        margin:0,
+    },
+    ItemLeftExtra:{
+        flex:1.2,
+        justifyContent:'center',
+        alignItems:'center',
+        margin:0,
+        padding:10
+    },
+    ItemBody:{
+        flex:4,
+        justifyContent:'center',
+        alignItems:'flex-start',
+        alignSelf:'stretch',
+        margin:0
+    },
+    ItemRight:{
+        flex:1,
+        justifyContent:'flex-start',
+        alignItems:'center',
+        marginTop:2,
+        padding:0
+    },
+    ItemRightIcon:{
+        alignSelf:'center',
+        fontSize:20,
+        color:color.primary
+    },
+    thumbnailContainer:{
+        display:'flex',
+        justifyContent:'center',
+        alignItems:'center',
+        padding:5,
+        borderRadius:50,
+        borderWidth:2,
+        borderColor:color.primary
+    },
+    TextContainer:{
+        display:'flex',
+        justifyContent:'center',
+        alignItems:'center',
+        padding:5,
+        width: 60,
+        height: 60,
+        borderRadius:50,
+        borderWidth:2,
+        borderColor:color.primary
+    },
+    listSecContainer:{
+        flex:1,
+        justifyContent:'space-around',
+        flexDirection:'row',
+        alignItems:'center',
+        padding:5,
+        backgroundColor:color.primary
+    },
+    iconContainer:{
+        display:'flex',
+        justifyContent:'center',
+        alignItems:'center',
+        padding:8,
+        margin:5,
+        borderRadius:50,
+        borderWidth:2,
+        borderColor:'rgb(255,255,255)'
+    },
+    listIcon:{
+        fontSize:22,
+        color:'rgb(255,255,255)'
+    },
+    verified:{
+        color:color.primary,
+        fontSize:16,
+        fontStyle:'italic',
+        fontFamily:font.bold,
+        marginTop:5
+    }
+});
+
+export default styles;
