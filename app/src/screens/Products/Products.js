@@ -216,7 +216,7 @@ class Products extends Component{
                             {!!this.state.searchbarVisible ? (
                                <Input style={hstyles.inputField} placeholder="Search"  onChangeText={(text) => this._handleSearch(text)} value={this.state.query} /> 
                             ):(
-                                <Title style={hstyles.headtitle}>Accepted Request</Title>
+                                <Title style={hstyles.headtitle}>Products</Title>
                             )}
                             
                         </Body>

@@ -55,7 +55,7 @@ exports.protectedAuth = (req, res) => {
 
 
 exports.isAuthenticated = (req,res,next) => {
-  console.log('auth_token: ',req.get('authorization')); //console.log(req.body);
+  //console.log(req.body);
   
   var auth_token = req.get('authorization');
   console.log("----------------------auth token-------------------");

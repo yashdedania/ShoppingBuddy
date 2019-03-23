@@ -252,6 +252,8 @@ class MyCart extends Component {
          extra.modalVisible = false;
          extra.updatemodal = false;
          extra.currentprod = false;
+         extra.listArray = [];
+         extra.order = null;
          extra.loading = true;
          this.setState({...this.state,...extra});
          let data = {id:this.state.order.id,total:params};
