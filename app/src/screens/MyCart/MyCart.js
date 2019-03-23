@@ -255,9 +255,11 @@ class MyCart extends Component {
          extra.listArray = [];
          extra.order = null;
          extra.loading = true;
-         this.setState({...this.state,...extra});
+         
          let data = {id:this.state.order.id,total:params};
+         this.setState({...this.state,...extra});
          console.log(data);
+
         var resp = await products.billpay(data);
          if(resp !== false){
                 if(resp.status !== 'error'){
