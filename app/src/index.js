@@ -20,8 +20,10 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import OfflineNotice from './components/OfflineNotice';
-
+import MyCart from './screens/MyCart';
 import Profile from './screens/Profile';
+import VerifyOrders from './screens/PreviousBills';
+import MyOrders from './screens/MyOrders';
 class Index extends Component {
 	constructor(props) {
 		super(props);
@@ -78,6 +80,9 @@ const AppStack = createDrawerNavigator(
 				LogError:LogError,
 				UserAuthorization:UserAuthorization,
 				Products:Products,
+				MyCart:MyCart,
+				VerifyOrders:VerifyOrders,
+				MyOrders:MyOrders,
 				Logout:Logout
 			},
 			{	

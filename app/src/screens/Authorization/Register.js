@@ -224,7 +224,7 @@ class Register extends Component {
                 
                 <View style={styles.formContainer}>
                   <Button full rounded style={styles.logBut} onPress={() => this.validateInput()}>
-                    <Text style={styles.logtext}>SEND ACCESS REQUEST</Text>
+                    <Text style={styles.logtext}>Register</Text>
                   </Button>
                 </View>
 					</View>

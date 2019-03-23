@@ -6,7 +6,7 @@ import gstyles from '../../theme/styles/general';
 import Loader from '../../components/Loader';
 import {Container, View,Content, ListItem, Text, Thumbnail,Left,Right,Body,Title,Input} from 'native-base';
 import user from '../../api/user';
-import auth from '../../api/Authorization';
+import products from '../../api/products';
 import format from '../../components/dateformat';
 import searchData from '../../api/searchfilter';
 import * as Animatable from 'react-native-animatable';
@@ -14,12 +14,12 @@ import _ from 'lodash';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import colors from '../../theme/color';
-import UserModal from './UserModal';
+import BillModal from './BillModal';
 const { StatusBarManager } = NativeModules;
 import AlertAsync from "react-native-alert-async";
 
 
-class UserAuthorization extends Component {
+class PreviousBills extends Component {
     constructor(props){
         super(props);
         
@@ -33,9 +33,8 @@ class UserAuthorization extends Component {
             query:'',
             searchbarVisible:false,
             searchBarFocused:false,
-            staffModal:false,
             currentData:null,
-            usermodal:false
+            verifymodal:false
         }
         this._isMounted = false;
         
@@ -80,7 +79,7 @@ class UserAuthorization extends Component {
     }
     _fetchData = async() =>{
         let extra ={...this.state};
-        var resp = await user.findAllUser({page:'auth',verified:false});
+        var resp = await products.findAllOrders({page:'billverify',verified:false});
 
         extra.loading = false;
         extra.refreshing = false;
@@ -117,17 +116,17 @@ class UserAuthorization extends Component {
         }
     }
     _renderItem = ({item}) =>(
-                <ListItem  style={styles.ItemContainer} onPress={() => this._openModal(item,"normal")}>
+                <ListItem  style={styles.ItemContainer} onPress={() => this._openModal(item)}>
                     <Left style={styles.ItemLeft}>
                         <View style={styles.thumbnailContainer}>
-                            <Thumbnail source = {{uri:item.imageuri}} />
+                            <Thumbnail source = {{uri:item.user.imageuri}} />
                         </View>   
                     </Left>
                     <Body style={styles.ItemBody}>
-                        <Text>{item.username}</Text>
-                        <Text note>{item.email}</Text>
-                        <Text note style={styles.verified}>{item.verified ? '' : 'Blocked'}</Text>
-
+                        <Text>Order No: {item.id}</Text>
+                        <Text note>Total Amount: Rs. {item.total}</Text>
+                        <Text note style={styles.verified}>{item.paid ? 'Paid' : 'Not Paid'}</Text>
+                        <Text note style={styles.verified}>{item.paid ? (item.order_verify ? "Verified" : "Not Verified") : (item.user.order_status  == "empty" ? 'Empty Cart' : 'In Cart')}</Text>
                       </Body>
                       <Right style={styles.ItemRight}>
                         <Text note>{format.Time(item.createdAt)}</Text>
@@ -135,18 +134,10 @@ class UserAuthorization extends Component {
                       </Right>
                 </ListItem>
     );
-    _openModal = (params,name) =>{
+    _openModal = (params) =>{
         let extra = {...this.state};
-        if(name == "new" && params == null){
-            extra.currentData = null;
-            extra.staffModal = true;
-            console.log("--------------new user request sent");
-        }
-        else{
-            extra.currentData = params;
-            extra.staffModal = true;
-            console.log("Normal params");
-        }
+        extra.verifymodal = true;
+        extra.currentData = params;
         if(this._isMounted){    
 
             this.setState({...this.state,...extra});
@@ -155,38 +146,12 @@ class UserAuthorization extends Component {
     _onDismiss =()=>{
         let extra = {...this.state};
         extra.currentData = null;
-        extra.staffModal = false;
+        extra.verifymodal = false;
         if(this._isMounted){    
             this.setState({...this.state,...extra});
         }
     }
-    _onUpdate = async(params) =>{
-        if(this._isMounted){
-            let errors = {...this.state};
-            var resp = await user.singleUpdate(params);
-            errors.staffModal = false;
-            errors.currentData = null;
-            errors.loading = false;
-            if(resp !== false){
-                if(resp.status == 'ok'){
-                    console.log("In activity data received");
-                    errors.refreshing = true;
-                }
-                else{
-                    console.log("error recieved");
-                }
-            }
-            else{
-                console.log("False data recieved");
-            }
-            if(this._isMounted){
-                this.setState({...this.state,...errors});
-                this._fetchData();
-            }
-        }
-
-    }
-    
+   
     _keyboardDidShow = () =>{
         if(this._isMounted && this.state.searchbarVisible){
             this.setState({searchBarFocused:true});
@@ -203,49 +168,52 @@ class UserAuthorization extends Component {
         }    
     }
 
-    _onSubmit = (name,data) =>{
-        data.page = "normal";
-        this.setState({loading:true});
-        if(name == "Update"){
-
-            this._onUpdate(data);
-        }
-        else{
-            this._onRegister(data);
-        }
-        this._onDismiss();
-    }
-    _onRegister = async(params) =>{
-        let message = "";
-        let resp = await auth.register(params); //console.log('Register resp: ',resp);
-        if (resp !== false){
-            if (resp.status === 'error'){
-                message = resp.result;    
-                //console.log('In first IF');
-                //Toast.show({text: resp.result,buttonText: "Okay",type: "warning"});
+    _onPaybill = async(params) =>{
+        let choice = await AlertAsync(
+                    'Verify the bill',
+                    'Are you sure you want to verify this bill?',
+                    [
+                      {text:'Yes',onPress:() => true},
+                      {text:'No',onPress:() => false}
+                    ],
+                    {cancelable:false}
+                );
+        if(choice){
+            this.setState({verifymodal:false,loading:true,currentData:null});
+            var resp = await products.singleUpdate(params);
+            if(resp !== false){
+                if(resp.status !== 'error'){
+                    
+                    choice = await AlertAsync(
+                        'Bill Status',
+                        'Bill Successfully Verified',
+                        [
+                          {text:'Okay',onPress:() => true}
+                        ],
+                        {cancelable:true}
+                    );
+                    this._fetchData();
+                }
+                else{
+                    choice = await AlertAsync(
+                        'Error',
+                        resp.result,
+                        [
+                          {text:'Okay',onPress:() => true}
+                        ],
+                        {cancelable:true}
+                    );
+                    console.log("error");
+                    console.log(resp.result);
+                    this.setState({loading:false});
+                }
             }
             else{
-                //console.log('In first else');
-                message = "User successfully registered!";
-                //Toast.show({text: "User successfully registered!",buttonText: "Okay",type: "success"});
-                //this.props.navigation.navigate('LoginScreen');
-            }  
+                this.setState({loading:false});
+                console.log("False response recieved");
+            }
         }
-        else{
-        //console.log('In last else');
-            message = "Couldn't communicate with server. Please try again";
         
-        }
-        await this._fetchData();
-        this.setState({loading:false});
-        choice = await AlertAsync(
-            'Response',
-            message,
-            [
-            {text:'Okay',onPress:() => true}
-            ],
-            {cancelable:true}
-        );
     }
     _handleSearch = async(text) =>{
         let extra = {...this.state};
@@ -257,7 +225,7 @@ class UserAuthorization extends Component {
         let extra = {...this.state};
         const formatText = extra.query.toLowerCase();
         const data = _.filter(this.state.fullData,chemical => {
-            return searchData.userContains(chemical,formatText);
+            return searchData.contains(chemical,formatText);
         });
         if(data === null || data.length <= 0){
             extra.nodatatext = "No Data Available"
@@ -327,7 +295,6 @@ class UserAuthorization extends Component {
     render() {
         return (
             <Container>
-                <UserModal visibile={this.state.staffModal} data={{...this.state.currentData}} dismiss={this._onDismiss} submitForm={this._onSubmit} block={this._block}/>
                 <Animatable.View ref={this.handleViewRef}  style={hstyles.header}>
                         <View style={[hstyles.headerContainer,this.state.searchbarVisible ? hstyles.lightbackground : hstyles.darkbackground]}>
                         <Left style={hstyles.left}>
@@ -336,16 +303,14 @@ class UserAuthorization extends Component {
                                    <Animatable.View animation="rotate" duration={500}><MaterialCommunityIcons  name="arrow-left" style={hstyles.darkicon}/></Animatable.View>
                                 </TouchableOpacity>
                             ):(
-                                <TouchableOpacity onPress={() => this._openModal(null,"new")}>
-                                    <MaterialCommunityIcons name="account-plus" style={hstyles.icon} />
-                                </TouchableOpacity>
+                                null
                             )}  
                         </Left>
                         <Body style={hstyles.body}>
                             {!!this.state.searchbarVisible ? (
                                <Input style={hstyles.inputField} placeholder="Search"  onChangeText={(text) => this._handleSearch(text)} value={this.state.query} /> 
                             ):(
-                                <Title style={hstyles.headtitle}>User List</Title>
+                                <Title style={hstyles.headtitle}>Order List</Title>
                             )}
                             
                         </Body>
@@ -363,7 +328,8 @@ class UserAuthorization extends Component {
                         </Right>
                         </View>
                 </Animatable.View>
-                
+                {(this.state.currentData !== null && this.state.currentData !== undefined && this.state.currentData.products !== null && this.state.currentData.products !== undefined) ? 
+            (<BillModal visibile={this.state.verifymodal} data={this.state.currentData}  dismiss={this._onDismiss} bill={this._onPaybill} />):(null)}
                 <Loader loading={this.state.loading} />
                 {(this.state.listArray !== null && this.state.listArray !== undefined && this.state.listArray.length > 0) ? 
                     (
@@ -388,4 +354,4 @@ class UserAuthorization extends Component {
         );
     }
 }
-export default UserAuthorization;
+export default PreviousBills;

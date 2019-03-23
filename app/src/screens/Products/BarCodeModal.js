@@ -1,7 +1,8 @@
 import { BarCodeScanner, Permissions } from 'expo';
 import React,{Component} from 'react';
+import { connect } from 'react-redux';
 import {View,Text,Modal,TouchableOpacity} from 'react-native';
-import {Button} from 'native-base';
+import {Button,Content} from 'native-base';
 import styles from '../../theme/styles/requestsent';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import AlertAsync from "react-native-alert-async";
@@ -34,21 +35,29 @@ class BarCodeModal extends Component{
     	return(
     		<Modal visible={this.props.visibile}  animationType={'slide'}  onRequestClose={() => {console.log("Modal close")}}>
     			<View style={styles.ModalContainer}><Text style={styles.Modaltitle}>Scan Products</Text><TouchableOpacity onPress={() => this.props.dismiss()}><MaterialCommunityIcons name='close-outline' style={styles.Modalclose}/></TouchableOpacity></View>
-    			<View style={{display:'flex',flexDirection:'column'}}>
+    			<Content>
+                <View style={{display:'flex',flexDirection:'column'}}>
     				<View><BarCodeScanner style={{width:undefined,height:500}} barCodeTypes={[BarCodeScanner.Constants.BarCodeType.qr]} onBarCodeScanned={this.handleBarCodeScanned} /></View>
     				<View style={{flex:1,padding:10,margin:10,flexDirection:'column'}}>
+                        <Text>Id: {(this.state.currentproduct.id === undefined || this.state.currentproduct.id === null) ? "Not Available" : this.state.currentproduct.id}</Text>
     					<Text>Name: {(this.state.currentproduct.name === undefined || this.state.currentproduct.name === null) ? "Not Available" : this.state.currentproduct.name}</Text>
     					<Text>Details: {(this.state.currentproduct.details === undefined || this.state.currentproduct.details === null) ? "Not Available" : this.state.currentproduct.details}</Text>
-    					<Text>Amount: {(this.state.currentproduct.amount === undefined || this.state.currentproduct.amount === null) ? "Not Available" : this.state.currentproduct.amount}</Text>
-    					<Button full primary rounded style={{marginTop:10}} onPress={() => this.props.sendData(this.state.currentproduct)}>
+    					<Text>Amount: {(this.state.currentproduct.amount === undefined || this.state.currentproduct.amount === null) ? "Not Available" : this.state.currentproduct.amount} Rs.</Text>
+    					<Button full primary rounded style={{marginTop:10,display:this.props.user.details.role == "admin" ? 'none':'flex'}} onPress={() => this.props.sendData(this.state.currentproduct)}>
                                 <Text style={{color:'rgb(255,255,255)'}}>Add to Cart</Text>
                         </Button>
     				</View>
     			</View>
+                </Content>
     		</Modal>
 
     	);
     }
 }
 
-export default BarCodeModal;
+const mapStateToProps = (state) => {
+  return {
+    user: state.user,
+  };
+};
+export default (connect(mapStateToProps)(BarCodeModal))

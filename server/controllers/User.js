@@ -42,6 +42,36 @@ const storage_user = multer.diskStorage({
 });
 const uploadImage = multer({storage:storage_user}).single('photo');
 
+
+exports.getsingle = (req,res) =>{
+	var req_user = JSON.parse(res.locals.auth_user.user_details);
+	if(req_user.currentorderid !== "" && req_user.order_status !== "empty"){
+		let x = {where:{id:req_user.id},include:[{model:Order,where:{id:req_user.currentorderid,paid:{$eq:false}},include:[{model:Products}]}]};
+		
+		User.findOne(x)
+		.then(result =>{
+			console.log("---------------Result found----------");
+			console.log(result);
+			if(result !== null && result !== undefined){
+				console.log("proper result sent");
+				res.send({status:'ok',result:result});
+			}
+			else{
+				console.log("Null result sent");
+				res.send({status:'ok',result:null});
+			}
+		})
+		.catch(function(error){
+			console.log(error);
+			res.send({status:'error',result:error});
+		})
+	}
+	else{
+		res.send({status:'ok',result:null});
+	}
+	
+	
+}
 exports.sendMail = (req,res) =>{
 	var message = '';
 	if(req.body !== undefined && req.body !== null){

@@ -7,6 +7,25 @@ module.exports = (sequelize, DataTypes) => {
     	allowNull: true,
       defaultValue:false
     },
+    quantity:{
+      type:DataTypes.JSONB,
+      defaultValue:{},
+    },
+    order_verify:{
+      type:DataTypes.BOOLEAN,
+      defaultValue:false
+    },
+    total:{
+      type: DataTypes.FLOAT,
+        allowNull: true,
+        defaultValue:0,
+        get:function(){
+            return parseFloat(this.getDataValue('total'))
+        },
+        set:function(val){
+            this.setDataValue('total', parseFloat(val));
+        }
+    }
     
   }, 
   {

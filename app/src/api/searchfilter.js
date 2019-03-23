@@ -1,8 +1,8 @@
 const searchData = {
     contains : function (data,query){
         const id = data.id.toString();
-        const chemical_name = data.chemical_name;
-       if(id.includes(query) || chemical_name.includes(query)){
+        const username = (data.user !== null && data.user !== undefined) ? data.user.username.toLowerCase() : "";
+       if(id.includes(query) || username.includes(query)){
            return true;
        }
        return false;    

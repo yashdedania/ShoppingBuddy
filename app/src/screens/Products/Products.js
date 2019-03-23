@@ -2,6 +2,7 @@ import React,{Component} from 'react';
 import {View,Text,FlatList,RefreshControl,TouchableOpacity,Keyboard,NativeModules, processColor} from 'react-native';
 import { BarCodeScanner, Permissions } from 'expo';
 import { connect } from 'react-redux';
+import {setUserDetails} from '../../actions/userActions';
 import { Toast,Container,Content,Title,Left,Body,Right,Input,ActionSheet} from 'native-base';
 import MylistView from './MylistView';
 import products from '../../api/products';
@@ -19,6 +20,7 @@ import * as Animatable from 'react-native-animatable';
 import searchData from '../../api/searchfilter';
 import BarCodeModal from './BarCodeModal';
 import ProductDetail from './ProductDetail';
+import QuantityModal from './QuantityModal';
 
 const { StatusBarManager } = NativeModules;
 class Products extends Component{
@@ -33,6 +35,7 @@ class Products extends Component{
 	  	refreshing:false,
         barcodemodal:false,
         productdetail:false,
+        quantitymodal:false,
         currentprod:null
 	  };
 	  this._isMounted = false;
@@ -87,6 +90,7 @@ class Products extends Component{
         let extra = {...this.state};
         extra.barcodemodal = true;
         extra.productdetail = false;
+        extra.quantitymodal = false;
         this.setState({...this.state,...extra});
     }
     _onDismiss = () =>{
@@ -94,6 +98,7 @@ class Products extends Component{
         let extra = {...this.state};
         extra.barcodemodal = false;
         extra.productdetail = false;
+        extra.quantitymodal = false;
         extra.currentprod = null;
         this.setState({...this.state,...extra});
     }
@@ -101,12 +106,33 @@ class Products extends Component{
         let extra = {...this.state};
         extra.barcodemodal = false;
         extra.productdetail = true;
+        extra.quantitymodal = false;
+        extra.currentprod = params;
+        this.setState({...this.state,...extra});
+    }
+    _handleQuantModal = (params) =>{
+        let extra = {...this.state};
+        extra.barcodemodal = false;
+        extra.productdetail = false;
+        extra.quantitymodal = true;
         extra.currentprod = params;
         this.setState({...this.state,...extra});
     }
     _onPressItem = async(params) =>{
     	console.log("Data pressed");
         let extra = {...this.state};
+        extra.barcodemodal = false;
+        extra.productdetail = false;
+        extra.quantitymodal = true;
+        extra.currentprod = params;
+        this.setState({...this.state,...extra});
+
+        
+        
+    }
+    _onQuantityDone = async(quantity,params) =>{
+        let extra = {...this.state};
+        params.quantity = quantity;
         let choice = await AlertAsync(
             'Add to cart',
             'Are you sure you want to add this product to cart?',
@@ -119,34 +145,47 @@ class Products extends Component{
         if(choice){
             extra.barcodemodal = false;
             extra.productdetail = false;
+            extra.quantitymodal = false;
             extra.currentprod = null;
             this.setState({...this.state,...extra});
             this._addToCart(params);
         }
-        
     }
     _addToCart = async(data) =>{
-        /*var resp = await products.add(data)
+        let choice;
+        var resp = await products.add(data)
         if(resp !== false){
             if(resp.status !== 'error'){
-
+                if(resp.result !== null && resp.result !== undefined && resp.result.id !== null && resp.result.id !== undefined){
+                    console.log("-------------------setting new user details-----------");
+                    this.props.setUserDetails(resp.result);
+                }
+                choice = await AlertAsync(
+                    'Product',
+                    'Product Successfully added to cart',
+                    [
+                      {text:'Okay',onPress:() => true}
+                    ],
+                    {cancelable:true}
+                );
             }
             else{
+                choice = await AlertAsync(
+                    'Error',
+                    resp.result,
+                    [
+                      {text:'Okay',onPress:() => true}
+                    ],
+                    {cancelable:true}
+                );
                 console.log("error");
                 console.log(resp.result);
             }
         }
         else{
             console.log("False response recieved");
-        }*/
-        let choice = await AlertAsync(
-            'Product',
-            'Product Successfully added to cart',
-            [
-              {text:'Okay',onPress:() => true}
-            ],
-            {cancelable:true}
-        );
+        }
+        
 
     }
     _renderItem = ({item}) =>(
@@ -196,13 +235,12 @@ class Products extends Component{
                         </View>
                     </Animatable.View>
                     <View style={hstyles.filterContainer}>
-                            <TouchableOpacity onPress={() => this._handlefilter('sort')} style={hstyles.filterTypes}><MaterialCommunityIcons name="sort" style={hstyles.filterIcon}/><Text style={hstyles.filterText}>Sort</Text></TouchableOpacity>
                             <TouchableOpacity onPress={() => this._handlemodal('data')} style={hstyles.filterTypes}><MaterialCommunityIcons name="qrcode-scan" style={hstyles.filterIcon}/><Text style={hstyles.filterText}>Scan Product</Text></TouchableOpacity>
                     </View>
 
                 <BarCodeModal visibile={this.state.barcodemodal} dismiss={this._onDismiss} sendData={this._onPressItem} />
                 <ProductDetail visibile={this.state.productdetail} data={this.state.currentprod} dismiss={this._onDismiss} />
-
+                <QuantityModal visibile={this.state.quantitymodal} data={this.state.currentprod} dismiss={this._onDismiss} onDone={this._onQuantityDone}/>
                 <Loader loading={this.state.loading} />
                 {(this.state.listArray !== null && this.state.listArray !== undefined && this.state.listArray.length > 0) ? 
                 (
@@ -228,5 +266,17 @@ class Products extends Component{
 		)
 	}
 }
+const mapStateToProps = (state) => {
+  return {
+    user: state.user,
+  };
+};
 
-export default Products;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setUserDetails: (name) => {
+      dispatch(setUserDetails(name));
+    }
+  };
+};
+export default (connect(mapStateToProps, mapDispatchToProps)(Products));

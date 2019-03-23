@@ -156,12 +156,15 @@ class SideMenu extends Component {
 		let role = this.props.user.details.role;
 		//let accessto = this.props.user.details.accessto;
 		//this._changeNavState("data");
-		if(name == "Dashboard" || name == "Logout" || name == "Profile" || name == "LogError"){
+		if(name == "Dashboard" || name == "Logout" || name == "Profile" || name == "LogError" || name == "Products"){
 			return 'flex';
 		}
-		if(name  == "UserAuthorization" && role == "admin"){
+		if((name  == "UserAuthorization" || name == "VerifyOrders") && role == "admin"){
 			return 'flex';
 		} 
+		if((name == "MyOrders" || name == "MyCart") && role != "admin"){
+			return 'flex';
+		}
 		else{
 			return 'none';
 		}
@@ -212,6 +215,16 @@ render () {
 						<Right style={dstyles.dRight} />
 					</ListItem>
 
+					<ListItem style={[{display:this._checkRender('Products')},dstyles.dListItem,(cr == 'Products') ? dstyles.dactBck:dstyles.dinactBck]} onPress={() => this._navigate('Products','')}>
+						<Left style={dstyles.dLeft} >
+								<Feather name="box" style={[dstyles.dIcon,(cr == "Products") ? dstyles.actCol : dstyles.inactCol]}/>
+						</Left>
+						<Body style={dstyles.dBody}>
+								<Text style={[dstyles.dLabel,(cr == "Products") ? dstyles.actCol : dstyles.inactCol]}>Products</Text>
+						</Body>
+						<Right style={dstyles.dRight} />
+					</ListItem>
+
 
 					<ListItem style={[{display:this._checkRender('UserAuthorization')},dstyles.dListItem,(cr == 'UserAuthorization') ? dstyles.dactBck:dstyles.dinactBck]} onPress={() => this._navigate('UserAuthorization','')}>
 						<Left style={dstyles.dLeft} >
@@ -222,6 +235,40 @@ render () {
 						</Body>
 						<Right style={dstyles.dRight} />
 					</ListItem>
+
+					<ListItem style={[{display:this._checkRender('VerifyOrders')},dstyles.dListItem,(cr == 'VerifyOrders') ? dstyles.dactBck:dstyles.dinactBck]} onPress={() => this._navigate('VerifyOrders','')}>
+						<Left style={dstyles.dLeft} >
+								<MaterialCommunityIcons name="clipboard-check" style={[dstyles.dIcon,(cr == "VerifyOrders") ? dstyles.actCol : dstyles.inactCol]}/>
+						</Left>
+						<Body style={dstyles.dBody}>
+								<Text style={[dstyles.dLabel,(cr == "VerifyOrders") ? dstyles.actCol : dstyles.inactCol]}>Verify Orders</Text>
+						</Body>
+						<Right style={dstyles.dRight} />
+					</ListItem>
+
+					<ListItem style={[{display:this._checkRender('MyCart')},dstyles.dListItem,(cr == 'MyCart') ? dstyles.dactBck:dstyles.dinactBck]} onPress={() => this._navigate('MyCart','')}>
+						<Left style={dstyles.dLeft} >
+								<FontAwesome name="shopping-cart" style={[dstyles.dIcon,(cr == "MyCart") ? dstyles.actCol : dstyles.inactCol]}/>
+						</Left>
+						<Body style={dstyles.dBody}>
+								<Text style={[dstyles.dLabel,(cr == "MyCart") ? dstyles.actCol : dstyles.inactCol]}>My Cart</Text>
+						</Body>
+						<Right style={dstyles.dRight} />
+					</ListItem>
+
+					<ListItem style={[{display:this._checkRender('MyOrders')},dstyles.dListItem,(cr == 'MyOrders') ? dstyles.dactBck:dstyles.dinactBck]} onPress={() => this._navigate('MyOrders','')}>
+						<Left style={dstyles.dLeft} >
+								<FontAwesome name="history" style={[dstyles.dIcon,(cr == "MyOrders") ? dstyles.actCol : dstyles.inactCol]}/>
+						</Left>
+						<Body style={dstyles.dBody}>
+								<Text style={[dstyles.dLabel,(cr == "MyOrders") ? dstyles.actCol : dstyles.inactCol]}>My Orders</Text>
+						</Body>
+						<Right style={dstyles.dRight} />
+					</ListItem>
+
+					
+
+
 
 					{/*<ListItem style={[{display:this._checkRender('LogError')},dstyles.dListItem,cr == 'LogError' ? dstyles.dactBck:dstyles.dinactBck]} onPress={() => this._navigate('LogError','')}>
 						<Left style={dstyles.dLeft}>

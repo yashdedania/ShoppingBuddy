@@ -75,7 +75,15 @@ class Home extends Component {
     
     _renderCard = (name) =>{
       const role = this.props.user.details.role;
-      return true;
+      if(name == 'Profile' || name == "Products"){
+        return true;
+      }
+      else if( (name == "MyCart" || name == "MyOrders") && role != "admin"){
+        return true;
+      }
+      else if( (name == "VerifyOrders" || name == "UserAuthorization") && role == "admin" ){
+        return true;
+      }
     }
   	render(){
   		return(
@@ -117,7 +125,21 @@ class Home extends Component {
           </TouchableOpacity>
 
 
-          <TouchableOpacity style={this._renderCard('Profile') === true ? styles.cardStyles : styles.hideCard} onPress={() => this.props.navigation.navigate('Products')}>
+          <TouchableOpacity style={this._renderCard('Products') === true ? styles.cardStyles : styles.hideCard} onPress={() => this.props.navigation.navigate('Products')}>
+              {/* CARD Upper-Half Icon + Circle + Text */}
+              <View style={styles.cardUpper}>
+                {/* Icon */}
+                <View style={styles.cardIconView}>
+                  <Feather name="box" style={styles.cardIcon} />
+                </View>
+              </View>
+              {/* CARD Lower-Half Text */}
+              <View>
+                <Text style={styles.cardNameText}>Products</Text>
+              </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={this._renderCard('MyCart') === true ? styles.cardStyles : styles.hideCard} onPress={() => this.props.navigation.navigate('MyCart')}>
               {/* CARD Upper-Half Icon + Circle + Text */}
               <View style={styles.cardUpper}>
                 {/* Icon */}
@@ -127,7 +149,50 @@ class Home extends Component {
               </View>
               {/* CARD Lower-Half Text */}
               <View>
-                <Text style={styles.cardNameText}>Products</Text>
+                <Text style={styles.cardNameText}>My Cart</Text>
+              </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={this._renderCard('VerifyOrders') === true ? styles.cardStyles : styles.hideCard} onPress={() => this.props.navigation.navigate('VerifyOrders')}>
+              {/* CARD Upper-Half Icon + Circle + Text */}
+              <View style={styles.cardUpper}>
+                {/* Icon */}
+                <View style={styles.cardIconView}>
+                  <MaterialCommunityIcons name="clipboard-check" style={styles.cardIcon} />
+                </View>
+              </View>
+              {/* CARD Lower-Half Text */}
+              <View>
+                <Text style={styles.cardNameText}>Verify Orders</Text>
+              </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={this._renderCard('UserAuthorization') === true ? styles.cardStyles : styles.hideCard} onPress={() => this.props.navigation.navigate('UserAuthorization')}>
+              {/* CARD Upper-Half Icon + Circle + Text */}
+              <View style={styles.cardUpper}>
+                {/* Icon */}
+                <View style={styles.cardIconView}>
+                  <Feather name="user-check" style={styles.cardIcon} />
+                </View>
+              </View>
+              {/* CARD Lower-Half Text */}
+              <View>
+                <Text style={styles.cardNameText}>User Authorization</Text>
+              </View>
+          </TouchableOpacity>
+
+
+          <TouchableOpacity style={this._renderCard('MyOrders') === true ? styles.cardStyles : styles.hideCard} onPress={() => this.props.navigation.navigate('MyOrders')}>
+              {/* CARD Upper-Half Icon + Circle + Text */}
+              <View style={styles.cardUpper}>
+                {/* Icon */}
+                <View style={styles.cardIconView}>
+                  <FontAwesome name="history" style={styles.cardIcon} />
+                </View>
+              </View>
+              {/* CARD Lower-Half Text */}
+              <View>
+                <Text style={styles.cardNameText}>My Orders</Text>
               </View>
           </TouchableOpacity>
 

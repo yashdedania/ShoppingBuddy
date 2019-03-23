@@ -46,8 +46,9 @@ module.exports = (sequelize, DataTypes) => {
     order_status:{
       type:DataTypes.STRING,
       allowNull:true,
-      defaultValue:""
+      defaultValue:"empty"
     },
+    
     notificationToken:{
       type:DataTypes.STRING,
       allowNull:true,

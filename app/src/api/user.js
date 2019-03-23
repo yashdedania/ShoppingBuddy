@@ -78,6 +78,19 @@ const user = {
             console.log("Error in Updating the form");
             return false;
         }
+    },
+    getsingle:async function(params){
+        var result = await fetchdata('POST', '/getsingle', JSON.stringify(params),'application/json');
+        if(result !== false){
+            //console.log("Printing result");
+            //console.log(result);
+            return result;
+        }
+        
+        else{
+            console.log("Error in Updating the form");
+            return false;
+        }
     }
 }
 

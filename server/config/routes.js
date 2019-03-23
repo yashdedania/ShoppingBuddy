@@ -4,6 +4,7 @@ const Users = require('../controllers/User');
 const Utils = require('../controllers/utils/Auth');
 const Activity = require('../controllers/Activity');
 const Products = require('../controllers/Product');
+const Order = require('../controllers/Order');
 var Authorization = require('./middleware/Authorization');
 
 module.exports = (app,io) =>{
@@ -44,6 +45,7 @@ module.exports = (app,io) =>{
   router.post('/findAndUpdate',Users.findAndUpdate);
   router.post('/storeNotToken',Users.storeNotToken);
   router.post('/sendMail',Users.sendMail);
+  router.post('/getsingle',Users.getsingle);
   
   /* Activity routes */
   router.post('/getactivity',Activity.fetchActivity);
@@ -54,10 +56,17 @@ module.exports = (app,io) =>{
   /* Products */
   router.post('/insertproduct',Products.insert);
   router.post('/findproducts',Products.find);
-  router.post('/addproducts',Products.add);
+  
 
   /* Orders */
-  router.post('/findorders',Products.findorder);
+  router.post('/addproducts',Order.add);
+  router.post('/findorders',Order.findorder);
+  router.post('/updateproducts',Order.update);
+  router.post('/removeproducts',Order.remove);
+  router.post('/billpay',Order.billpay);
+  router.post('/findAllOrders',Order.findAllOrders);
+  router.post('/psingleUpdate',Order.psingleUpdate);
+  router.post('/findUserOrders',Order.findUserOrders);
 };
 
 
