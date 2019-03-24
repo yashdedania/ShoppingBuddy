@@ -189,7 +189,6 @@ render () {
 				<View style={dstyles.logoview}>
 						<Image key={new Date()} source={{uri:this.props.user.details.imageuri}} style={dstyles.logoImg}/>
 						<Text style={dstyles.username}>{this.props.user.details.username}</Text>
-						{/*<Text style={dstyles.role}>{this.props.user.details.role == "both" ? "Purchaser + Seller" : this.props.user.details.role}</Text>*/}
 						<Text style={dstyles.role}>{this.props.user.details.role}</Text>
 				</View>
 			<ScrollView>

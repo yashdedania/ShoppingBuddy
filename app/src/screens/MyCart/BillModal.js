@@ -1,11 +1,18 @@
 
 import React,{Component} from 'react';
 import {View,Text,Modal,TouchableOpacity,FlatList} from 'react-native';
-import {Button,Item,Content,Input,Left,Right,Body,List,ListItem} from 'native-base';
+import {Button,Item,Content,Input,Left,Right,Body,List,ListItem,ActionSheet} from 'native-base';
 import styles from '../../theme/styles/requestsent';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import AlertAsync from "react-native-alert-async";
 import colors from '../../theme/color';
+const BUTTONS = [
+    {text:"Debit Card",index:0},
+    {text:"Credit Card",index:1},
+    {text:"Net Banking",index:2},
+    {text:"UPI Banking",index:3},
+    {text:"Cancel",index:4}
+];
 class BillModal extends Component{
 	constructor(props) {
 	  super(props);
@@ -18,7 +25,28 @@ class BillModal extends Component{
 	componentDidMount(){
 
 	}
-	
+	_handleAction = (params) =>{
+        
+            ActionSheet.show(
+                {
+                  options: BUTTONS,
+                  cancelButtonIndex:4,
+                  title: "Select Payment Mode",
+                  tintColor:colors.primary
+                },
+                buttonIndex => {
+                    this._handleActionClick(BUTTONS[buttonIndex],params);
+     
+                }
+            );
+        
+        
+    }
+    _handleActionClick = (buttonIndex,params) =>{
+        if(buttonIndex.index != 4){
+            this.props.bill(params);
+        }
+    }
     
     calculate = () =>{
 
@@ -80,7 +108,7 @@ class BillModal extends Component{
                         </ListItem>
                     </List>
                 </Content>
-                <Button full primary rounded style={{margin:10}} onPress={() => this.props.bill(this.calculate())}>
+                <Button full primary rounded style={{margin:10}} onPress={() => this._handleAction(this.calculate())}>
                     <Text style={{color:'rgb(255,255,255)'}}>Pay Bill</Text>
                 </Button>
             </Modal>

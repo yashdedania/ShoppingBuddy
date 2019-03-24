@@ -15,6 +15,7 @@ const gstyles = StyleSheet.create({
         paddingRight:5,
     },
 
+
     cardStyles: {
         borderRadius: 10,
         backgroundColor: 'white',
@@ -98,7 +99,8 @@ const gstyles = StyleSheet.create({
 
     },
     safeView:{
-		flex:1
+		flex:1.5,
+        paddingBottom:20
 	},
 	username:{
 		color:'rgb(255,255,255)',
@@ -113,10 +115,10 @@ const gstyles = StyleSheet.create({
         
 	},
 	logoview:{
-		flex:0.5,
+		flex:0.8,
 		justifyContent:'center',
 		alignItems:'center',
-		height:50,
+		height:70,
 		backgroundColor:'black',
 	},
 	logoImg:{

@@ -1,6 +1,7 @@
 import {StyleSheet} from 'react-native';
 import colors from '../color';
 import fonts from '../font';
+
 const styles = StyleSheet.create({
 	lightheader:{
 	    backgroundColor:colors.background,
@@ -11,15 +12,13 @@ const styles = StyleSheet.create({
 	},
 	header:{
 	    backgroundColor:colors.primary,
-	    alignItems:'flex-end',
-		height:65,
-
+		height:55,
 	},
 	headerContainer:{
 		flex:1,
 		flexDirection:'row',
 		padding:5,
-		height:65
+		height:40
 	},
 	lightbackground:{
 		backgroundColor:colors.light,
