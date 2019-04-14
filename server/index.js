@@ -52,10 +52,10 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 app.use(methodOverride('_method'));
 
-app.use('/public',express.static(path.join(__dirname,'assets')))
+app.use('/public', express.static(path.join(__dirname, 'assets')))
 
 app.use((err, req, res, next) => {
-  console.log("Printing url: "+req.url);
+  console.log("Printing url: " + req.url);
   if (err.message.indexOf("not found") !== -1) {
     return next();
   }
@@ -79,18 +79,18 @@ app.use(
     //cookie: { secure: true },
   })
 );
-  
 
-require('./config/routes')(app,io);
+
+require('./config/routes')(app, io);
 
 
 const models = require('./models');
-models.sequelize.sync({force:false}).then(function() {
+models.sequelize.sync({ force: true }).then(function () {
 
   server.listen(port, () => {
     console.log(`Listening on port ${port}`);
   });
 
-}); 
+});
 
 module.exports = app;

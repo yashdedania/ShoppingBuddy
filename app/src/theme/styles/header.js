@@ -1,113 +1,119 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 import colors from '../color';
 import fonts from '../font';
 
 const styles = StyleSheet.create({
-	lightheader:{
-	    backgroundColor:colors.background,
-		height:55,
+	lightheader: {
+		backgroundColor: colors.background,
+		height: 55,
 	},
-	blurBackground:{
-		backgroundColor:'rgba(0,0,0,0.1)',
+	blurBackground: {
+		backgroundColor: 'rgba(0,0,0,0.1)',
 	},
-	header:{
-	    backgroundColor:colors.primary,
-		height:55,
+	header: {
+		backgroundColor: colors.primary,
+		height: 55,
 	},
-	headerContainer:{
-		flex:1,
-		flexDirection:'row',
-		padding:5,
-		height:40
+	headerContainer: {
+		flex: 1,
+		flexDirection: 'row',
+		padding: 5,
+		height: 40
 	},
-	lightbackground:{
-		backgroundColor:colors.light,
-		borderWidth:2,
-		borderColor:colors.background
+	lightbackground: {
+		backgroundColor: colors.light,
+		borderWidth: 2,
+		borderColor: colors.background
 	},
-	darkbackground:{
-		backgroundColor:colors.primary
+	darkbackground: {
+		backgroundColor: colors.primary
 	},
-	primaryColor:{
-		backgroundColor:colors.primary	
+	primaryColor: {
+		backgroundColor: colors.primary
 	},
-	secondaryColor:{
-		backgroundColor:colors.background
-	},  
-	icon:{
-	    fontSize:28,
-	    color:colors.light,
-	    marginTop:2,
+	secondaryColor: {
+		backgroundColor: colors.background
 	},
-	darkicon:{
-	    fontSize:28,
-	    color:'rgb(118,118,118)',
-	    marginTop:2,
+	icon: {
+		fontSize: 28,
+		color: colors.light,
+		marginTop: 2,
 	},
-	headtitle:{
-		fontSize:20,
-		color:'rgb(255,255,255)',
-		fontFamily:fonts.bold,
-		textAlign:'center'
+	darkicon: {
+		fontSize: 28,
+		color: 'rgb(118,118,118)',
+		marginTop: 2,
 	},
-	left:{
-		paddingLeft:5,
-		flex:0.1,
-		flexDirection:'row',
-		alignItems:'center',
-		justifyContent:'flex-start',
+	headtitle: {
+		fontSize: 20,
+		color: 'rgb(255,255,255)',
+		fontFamily: fonts.bold,
+		textAlign: 'center'
 	},
-	body:{
-		flex:1,
-		flexDirection:'row',
-		justifyContent:'center',
-		alignItems:'center',
-		padding:5,
+	left: {
+		paddingLeft: 5,
+		flex: 0.1,
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'flex-start',
 	},
-	inputField:{
-		width:'100%',
-		height:'100%'
+	body: {
+		flex: 1,
+		flexDirection: 'row',
+		justifyContent: 'center',
+		alignItems: 'center',
+		padding: 5,
 	},
-	right:{
-		paddingRight:5,
-		flexDirection:'row',
-		flex:0.1,
-		justifyContent:'flex-end',
-		alignItems:'center'	
+	inputField: {
+		width: '100%',
+		height: '100%'
 	},
-	filterContainer:{
-		display:'flex',
-		backgroundColor:colors.light,
-		borderBottomWidth:2,
-		borderBottomColor:colors.gray,
-		flexDirection:'row',
-		alignItems:'center',
-		margin:0,
+	right: {
+		paddingRight: 5,
+		flexDirection: 'row',
+		flex: 0.5,
+		justifyContent: 'flex-end',
+		alignItems: 'center'
 	},
-	filterTypes:{
-		flex:1,
-		justifyContent:'center',
-		alignItems:'center',
-		flexDirection:'row',
-		borderRightWidth:1,
-		paddingTop:10,
-		paddingBottom:10,
-		borderRightColor:colors.gray
+	rightText: {
+		fontSize: 16,
+		color: 'rgb(255,255,255)',
+		fontFamily: fonts.regular,
+		textAlign: 'center'
 	},
-	filterType2:{
-		borderRightWidth:0,
-		borderLeftWidth:1,
-		borderLeftColor:colors.gray
+	filterContainer: {
+		display: 'flex',
+		backgroundColor: colors.light,
+		borderBottomWidth: 2,
+		borderBottomColor: colors.gray,
+		flexDirection: 'row',
+		alignItems: 'center',
+		margin: 0,
 	},
-	filterIcon:{
-		fontSize:22,
-		color:colors.darkgray,
-		marginRight:10
+	filterTypes: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
+		flexDirection: 'row',
+		borderRightWidth: 1,
+		paddingTop: 10,
+		paddingBottom: 10,
+		borderRightColor: colors.gray
 	},
-	filterText:{
-		marginLeft:10,
-		fontSize:20,
-		color:colors.darkgray
+	filterType2: {
+		borderRightWidth: 0,
+		borderLeftWidth: 1,
+		borderLeftColor: colors.gray
+	},
+	filterIcon: {
+		fontSize: 22,
+		color: colors.darkgray,
+		marginRight: 10
+	},
+	filterText: {
+		marginLeft: 10,
+		fontSize: 20,
+		color: colors.darkgray
 	}
 
 });

@@ -4,29 +4,30 @@ const Products = require('../models').products;
 const Order = require('../models').order;
 const SERVER_API = process.env.SERVER_API;
 
-exports.insert = (req,res) =>{
+exports.insert = (req, res) => {
 	let x = {};
 	x.name = req.body.name;
 	x.details = req.body.details;
 	x.amount = req.body.amount;
-	x.prodmap = SERVER_API + "/public/" +req.body.prodmap;
+	x.prodmap = SERVER_API + "/public/" + req.body.prodmap;
+	x.prodimage = SERVER_API + "/public/" + req.body.prodimage;
 	Products.create(x)
-	.then(result =>{
-		console.log(result);
-		res.send({status:'ok',result:result});
-	})
-	.catch(function(error){
-		res.send({status:'error',result:error});
-	});
+		.then(result => {
+			console.log(result);
+			res.send({ status: 'ok', result: result });
+		})
+		.catch(function (error) {
+			res.send({ status: 'error', result: error });
+		});
 }
-exports.find = (req,res) =>{
+exports.find = (req, res) => {
 	Products.findAll({})
-	.then(result =>{
-		res.send({status:'ok',result:result});
-	})
-	.catch(function(error){
-		res.send({status:'error',result:error});
-	})
+		.then(result => {
+			res.send({ status: 'ok', result: result });
+		})
+		.catch(function (error) {
+			res.send({ status: 'error', result: error });
+		})
 }
 
 

@@ -23,5 +23,5 @@ module.exports = {
     "port": 5432,
     "dialect": "postgres",
     "alloworigin": process.env.PROD_ALLOW_ORIGIN
-  }  
+  }
 };

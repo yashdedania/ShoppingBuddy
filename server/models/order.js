@@ -3,44 +3,44 @@ module.exports = (sequelize, DataTypes) => {
 
   const order = sequelize.define('order', {
     paid: {
-    	type: DataTypes.BOOLEAN,
-    	allowNull: true,
-      defaultValue:false
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+      defaultValue: false
     },
-    quantity:{
-      type:DataTypes.JSONB,
-      defaultValue:{},
+    quantity: {
+      type: DataTypes.JSONB,
+      defaultValue: {},
     },
-    order_verify:{
-      type:DataTypes.BOOLEAN,
-      defaultValue:false
+    order_verify: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
     },
-    total:{
+    total: {
       type: DataTypes.FLOAT,
-        allowNull: true,
-        defaultValue:0,
-        get:function(){
-            return parseFloat(this.getDataValue('total'))
-        },
-        set:function(val){
-            this.setDataValue('total', parseFloat(val));
-        }
+      allowNull: true,
+      defaultValue: 0,
+      get: function () {
+        return parseFloat(this.getDataValue('total'))
+      },
+      set: function (val) {
+        this.setDataValue('total', parseFloat(val));
+      }
     }
-    
-  }, 
-  {
-    /*indexes: [
-        {
-            unique: true,
-            fields: ['email']
-        }
-    ]*/
-  });
 
-  order.associate = function(models) {
+  },
+    {
+      /*indexes: [
+          {
+              unique: true,
+              fields: ['email']
+          }
+      ]*/
+    });
+
+  order.associate = function (models) {
     // associations can be defined here
     order.belongsTo(models.user, { foreignKey: 'user_order' });
-    order.hasMany(models.products,{foreignKey:'order_products'});
+    order.hasMany(models.products, { foreignKey: 'order_products' });
   };
   return order;
 };

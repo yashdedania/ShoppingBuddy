@@ -4,16 +4,16 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        activity_detail:{
-            type:DataTypes.TEXT,
-            default:''
+        activity_detail: {
+            type: DataTypes.TEXT,
+            default: ''
         }
-    },{
+    }, {
 
-    });
-    activity.associate = function(models) {
+        });
+    activity.associate = function (models) {
         // associations can be defined here
-        activity.belongsTo(models.user, {foreignKey:'ract_user_id'});
+        activity.belongsTo(models.user, { foreignKey: 'ract_user_id' });
     };
 
     return activity;
