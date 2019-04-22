@@ -126,6 +126,7 @@ class Products extends Component {
         StatusBarManager.setColor(processColor('#FF5964'), true);
         this._searchQuery();
     }
+
     async fetchdata() {
         var resp = await products.findAll({});
 
