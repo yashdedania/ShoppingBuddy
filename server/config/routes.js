@@ -59,7 +59,8 @@ module.exports = (app, io) => {
   /* Products */
   router.post('/insertproduct', Products.insert);
   router.post('/findproducts', Products.find);
-
+  router.post('/insertMultipleProduct', Products.multipleInsert);
+  router.post('/deleteproduct', Product.delete);
 
   /* Orders */
   router.post('/addproducts', Order.add);
