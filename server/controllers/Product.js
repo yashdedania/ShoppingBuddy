@@ -30,12 +30,7 @@ exports.insert = (req, res) => {
 exports.find = (req, res) => {
 	Products.findAll({})
 		.then(result => {
-			let temp = {};
-			if (result !== null && result !== undefined && result.length > 0) {
-				temp.length = result.length;
-			}
-			temp.products = result;
-			res.send({ status: 'ok', result: temp });
+			res.send({ status: 'ok', result: result });
 		})
 		.catch(function (error) {
 			res.send({ status: 'error', result: error });
