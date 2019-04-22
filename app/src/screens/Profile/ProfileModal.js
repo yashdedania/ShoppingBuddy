@@ -96,7 +96,7 @@ class Profile extends Component {
         return errors;
     }
     _validateUsername(errors) {
-        if (errors.username.value.length === 0 || errors.username.value.toString().match(/\d+/g) != null) {
+        if (errors.username.value.length === 0) {
             errors.username.helperText = 'Please enter a correct name'; errors.username.err = true;
         }
         else {

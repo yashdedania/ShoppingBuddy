@@ -35,7 +35,7 @@ class Login extends Component {
     this.setState({ ...this.state, ...errors });
   }
   validate_UserName(errors){
-    if(errors.reg_username.value.length === 0  || errors.reg_username.value.toString().match(/\d+/g) != null){
+    if(errors.reg_username.value.length === 0){
       errors.reg_username.helperText = 'Please enter a correct name'; errors.reg_username.err = true;
     }
     else{

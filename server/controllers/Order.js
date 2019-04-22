@@ -40,6 +40,7 @@ exports.add = (req, res) => {
 	else {
 		first_time = false;
 	}
+	
 	if (first_time && parseFloat(req_user.budget) > parseFloat(req.body.amount) * parseFloat(req.body.quantity)) {
 		console.log("-------------------In first time-------");
 		option1 = {};

@@ -16,6 +16,7 @@ module.exports = (app, io) => {
     Auth for login and register
 *****/
 
+
   router.post('/protectedAuth', Authorization.protectedAuth);
 
   router.post('/register', Users.register);
@@ -70,5 +71,7 @@ module.exports = (app, io) => {
   router.post('/psingleUpdate', Order.psingleUpdate);
   router.post('/findUserOrders', Order.findUserOrders);
 };
+
+
 
 

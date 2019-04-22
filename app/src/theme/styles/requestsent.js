@@ -95,6 +95,10 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         paddingRight: 10
     },
+    modalContent: {
+        fontFamily: font.regular,
+        fontSize: 20
+    },
     Modaltitle: {
         color: 'black',
         fontFamily: font.bold,

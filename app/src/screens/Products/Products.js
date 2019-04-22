@@ -34,6 +34,9 @@ class Products extends Component {
             fullData: [],
             nodatatext: '',
             loading: false,
+            searchbarVisible: false,
+            searchBarFocused: false,
+            query: '',
             refreshing: false,
             barcodemodal: false,
             productdetail: false,
@@ -45,12 +48,83 @@ class Products extends Component {
     }
     componentDidMount() {
         this._isMounted = true;
+        this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
+        this.keyboardWillShowListener = Keyboard.addListener('keyboardWillShow', this._keyboardWillShow);
+        this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
         this.setState({ loading: true });
         this.fetchdata();
 
+
     }
+
     componentWillUnmount() {
         this._isMounted = false;
+        this.keyboardDidShowListener.remove();
+        this.keyboardWillShowListener.remove();
+        this.keyboardDidHideListener.remove();
+    }
+
+    _keyboardDidShow = () => {
+        if (this._isMounted && this.state.searchbarVisible) {
+            this.setState({ searchBarFocused: true });
+        }
+    }
+    _keyboardWillShow = () => {
+        if (this._isMounted && this.state.searchbarVisible) {
+            this.setState({ searchBarFocused: true });
+        }
+    }
+    _keyboardDidHide = () => {
+        if (this._isMounted) {
+            this.setState({ searchBarFocused: false });
+        }
+    }
+    _handleSearch = async (text) => {
+        let extra = { ...this.state };
+        extra.query = text;
+        await this.setState({ ...this.state, ...extra });
+        this._searchQuery();
+    }
+    _searchQuery = () => {
+        let extra = { ...this.state };
+        const formatText = extra.query.toLowerCase();
+        const data = _.filter(this.state.fullData, product => {
+            return searchData.contains(product, formatText);
+        });
+        if (data === null || data.length <= 0) {
+            extra.nodatatext = "No Data Available"
+        }
+        if (this._isMounted) {
+            extra.listArray = data;
+            this.setState({ ...this.state, ...extra });
+        }
+    }
+    _showSearch = () => {
+        if (this._isMounted) {
+            this.setState({ searchbarVisible: true });
+        }
+        this.view.transitionTo({ backgroundColor: colors.background });
+        StatusBarManager.setStyle('dark-content');
+        StatusBarManager.setColor(processColor('#E0E0E0'), true);
+    }
+    _clearSearch = async () => {
+        console.log("Clear search excuted");
+        if (this._isMounted) {
+            await this.setState({ query: '' });
+        }
+        this._searchQuery();
+    }
+    _hideSearch = async () => {
+        let extra = { ...this.state };
+        extra.query = '';
+        extra.searchbarVisible = false;
+        if (this._isMounted) {
+            await this.setState({ ...this.state, ...extra });
+        }
+        this.view.transitionTo({ backgroundColor: colors.primary });
+        StatusBarManager.setStyle('light-content');
+        StatusBarManager.setColor(processColor('#FF5964'), true);
+        this._searchQuery();
     }
     async fetchdata() {
         var resp = await products.findAll({});
@@ -252,6 +326,7 @@ class Products extends Component {
             screenname="add"
         />
     );
+    handleViewRef = ref => this.view = ref;
     render() {
         return (
             <Container style={this.state.searchBarFocused ? hstyles.blurBackground : null}>
@@ -277,24 +352,24 @@ class Products extends Component {
 
                         </Body>
                         <Right style={hstyles.right}>
-                            {/* {(!!this.state.searchbarVisible) ? (null):(
+                            {(!!this.state.searchbarVisible) ? (null) : (
                                 <TouchableOpacity onPress={() => this._showSearch()}>
                                     <Ionicons name="ios-search" style={hstyles.icon} />
                                 </TouchableOpacity>
                             )}
                             {(!!this.state.searchbarVisible && this.state.query.length > 1) ? (
                                 <TouchableOpacity onPress={() => this._clearSearch()}>
-                                    <MaterialCommunityIcons name ="close" style={hstyles.darkicon} />
+                                    <MaterialCommunityIcons name="close" style={hstyles.darkicon} />
                                 </TouchableOpacity>
-                            ):(null)}    */}
-                            <TouchableOpacity onPress={() => this._handleBudget()}>
-                                <Text style={hstyles.rightText}>Budget : {this.props.user.details.budget} Rs.</Text>
-                            </TouchableOpacity>
+                            ) : (null)}
                         </Right>
                     </View>
                 </Animatable.View>
                 <View style={hstyles.filterContainer}>
                     <TouchableOpacity onPress={() => this._handlemodal('data')} style={hstyles.filterTypes}><MaterialCommunityIcons name="qrcode-scan" style={hstyles.filterIcon} /><Text style={hstyles.filterText}>Scan Product</Text></TouchableOpacity>
+                    <TouchableOpacity onPress={() => this._handleBudget()} style={hstyles.filterTypes}>
+                        <Text style={hstyles.filterText}>Budget : {this.props.user.details.budget} Rs.</Text>
+                    </TouchableOpacity>
                 </View>
 
                 <BarCodeModal visibile={this.state.barcodemodal} dismiss={this._onDismiss} sendData={this._onPressItem} />

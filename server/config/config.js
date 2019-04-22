@@ -2,7 +2,7 @@
 module.exports = {
   "development": {
     "username": "postgres",
-    "password": "yash6496",
+    "password": "Shruti@2416",
     "database": "QRSCAN",
     "host": "127.0.0.1",
     "port": 5432,

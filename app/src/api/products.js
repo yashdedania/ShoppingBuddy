@@ -14,6 +14,7 @@ const products = {
             return false;
         }  
     },
+    
     add :  async function (params) {
         //console.log("In Get activity");
         var result = await fetchdata('POST', '/addproducts', JSON.stringify(params), 'application/json');
