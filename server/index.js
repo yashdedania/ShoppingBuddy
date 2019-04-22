@@ -85,7 +85,7 @@ require('./config/routes')(app, io);
 
 
 const models = require('./models');
-models.sequelize.sync({ force: true }).then(function () {
+models.sequelize.sync({ force: false }).then(function () {
 
   server.listen(port, () => {
     console.log(`Listening on port ${port}`);
