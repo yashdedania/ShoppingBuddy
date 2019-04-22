@@ -26,7 +26,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.beproject.QRSCAN"
+    },
+    "android": {
+      "package": "com.beproject.QRSCAN"
     },
     "description": ""
   }

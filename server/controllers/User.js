@@ -116,9 +116,9 @@ exports.sendMail = (req, res) => {
 		}
 	}
 	let mailOptions = {
-		from: 'yashrobinhood6@gmail.com',
-		to: 'yashdedania6496@gmail.com',
-		subject: 'Errors in Accord app',
+		from: 'srishtiy38@gmail.com',
+		to: 'srishtiy38@gmail.com',
+		subject: 'Errors in Shopping Buddy app',
 		text: message
 	};
 	transporter.sendMail(mailOptions, (error, info) => {
