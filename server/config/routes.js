@@ -68,6 +68,7 @@ module.exports = (app, io) => {
   router.post('/updateproducts', Order.update);
   router.post('/removeproducts', Order.remove);
   router.post('/billpay', Order.billpay);
+  router.post('/paymentGateway', Order.paymentModule);
   router.post('/findAllOrders', Order.findAllOrders);
   router.post('/psingleUpdate', Order.psingleUpdate);
   router.post('/findUserOrders', Order.findUserOrders);

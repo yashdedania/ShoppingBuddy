@@ -5,7 +5,7 @@ const Products = require('../models').products;
 const sequelize = require('sequelize');
 const Order = require('../models').order;
 const SERVER_API = process.env.SERVER_API;
-
+const request = require('request');
 exports.findorder = (req, res) => {
 	Order.findAll({ include: [{ model: Products }] })
 		.then(result => {
@@ -40,7 +40,7 @@ exports.add = (req, res) => {
 	else {
 		first_time = false;
 	}
-	
+
 	if (first_time && parseFloat(req_user.budget) > parseFloat(req.body.amount) * parseFloat(req.body.quantity)) {
 		console.log("-------------------In first time-------");
 		option1 = {};
@@ -232,7 +232,51 @@ exports.remove = (req, res) => {
 	}
 
 }
-
+exports.paymentModule = (req, res) => {
+	var req_user = JSON.parse(res.locals.auth_user.user_details);
+	var headers = { 'X-Api-Key': 'test_decb133169c8187fcaa97150a4e', 'X-Auth-Token': 'test_898ed5377a3ba305244e003a7f0' };
+	var payload = {
+		purpose: 'Bill',
+		amount: '',
+		buyer_name: req_user.username,
+		redirect_url: 'http://example.com/',
+		send_email: true,
+		email: req_user.email,
+		phone: req_user.mobileno,
+		allow_repeated_payments: false
+	}
+	if (req.body.amount === null && req.body.amount === undefined && req.body.amount === "") {
+		res.send({ status: 'error', result: 'Invalid Amount Please try again...' });
+	}
+	else if (req.body.trans_id !== null && req.body.trans_id !== undefined && req.body.trans_id !== '') {
+		request.get(`https://test.instamojo.com/api/1.1/payment-requests/${req.body.trans_id}`, { headers: headers }, function (error, response) {
+			if (error) {
+				console.log("---Error in getting Payment Details-----");
+				console.log(error);
+				res.send({ status: 'error', result: error });
+			}
+			else {
+				console.log(response);
+				res.send({ status: 'ok', result: response });
+			}
+		});
+	}
+	else {
+		console.log("------- In amount non zero-------");
+		payload.amount = req.body.amount;
+		request.post('https://test.instamojo.com/api/1.1/payment-requests/', { form: payload, headers: headers }, function (error, response, body) {
+			if (!error) {
+				let data = JSON.parse(response.body)
+				console.log(data.payment_request.longurl)
+				res.send({ status: 'ok', result: data.payment_request.longurl });
+			} else {
+				console.log("------Error recieved from instamojo-----");
+				console.log(error);
+				res.send({ status: 'error', result: error });
+			}
+		});
+	}
+}
 exports.billpay = (req, res) => {
 	let option1, option2;
 	var req_user = JSON.parse(res.locals.auth_user.user_details);
@@ -242,7 +286,9 @@ exports.billpay = (req, res) => {
 	}
 	var hashed_id = auth_token.split('__(break)__')[0];
 	var session_key = auth_token.split('__(break)__')[2];
-	option1 = { total: req.body.total, paid: true };
+	console.log("---------------Transaction ID:------------");
+	console.log(req.body.transaction_id);
+	option1 = { total: req.body.total, paid: true, transaction_id: req.body.transaction_id };
 	option2 = { where: { id: req.body.id } };
 	Order.update(option1, option2)
 		.then(result => {

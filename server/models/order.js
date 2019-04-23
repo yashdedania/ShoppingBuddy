@@ -7,6 +7,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       defaultValue: false
     },
+    transaction_id: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue: ""
+    },
     quantity: {
       type: DataTypes.JSONB,
       defaultValue: {},
@@ -26,7 +31,6 @@ module.exports = (sequelize, DataTypes) => {
         this.setDataValue('total', parseFloat(val));
       }
     }
-
   },
     {
       /*indexes: [

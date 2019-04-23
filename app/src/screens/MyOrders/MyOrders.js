@@ -126,6 +126,7 @@ class MyOrders extends Component {
                 <Text>Order No: {item.id}</Text>
                 <Text note>Total Amount: Rs. {item.total}</Text>
                 <Text note style={styles.verified}>{item.paid ? 'Paid' : 'Not Paid'}</Text>
+                {item.paid ? (<Text note>Transaction ID: {item.transaction_id}</Text>) : null}
                 <Text note style={styles.verified}>{item.order_verify ? "Verified" : "Not Verified"}</Text>
             </Body>
             <Right style={styles.ItemRight}>
